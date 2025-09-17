@@ -121,6 +121,9 @@
     variant = "";
   };
 
+  users.users.root = {
+    initialHashedPassword = "$6$kWg6iZqd4bCiQYSg$1dxeAroSKDsT7cDVWavdhCzxS.mv4reYtMCofQ6.W6vFZYMHXAc3mWNYLl5NK0p7kKTnWuzlFIeK3ntOzWhka1";
+  };
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
     # FIXME: Replace with your username
