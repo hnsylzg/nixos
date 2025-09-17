@@ -1,0 +1,43 @@
+configuration {
+  // 基础参数
+  show-icons: true;
+  // 布局定位
+  //突出显示鼠标指针下的条目
+  hover-select: true;
+  /* 禁用 MousePrimary 作为条目选择器 */
+  /* 如果没有此设置，您将无法将 MousePrimary 设置为条目接受器。*/
+  me-select-entry: ""; 
+  // me-accept-entry: [ MousePrimary, MouseSecondary, MouseDPrimary ]; //使用 LMB 单击或 RMB 单击或 LMB 双击
+  // me-select-entry: "MouseSecondary";
+  // me-accept-entry: "MousePrimary";
+  //MousePrimary does the click down action
+  me-select-entry: "MousePrimary"; 
+  //!MousePrimary does the click up
+  me-accept-entry: "!MousePrimary";
+  }
+* {
+  lightbg: #00000000;
+  background: #00000000;
+  lightfg: #f5c2e7;
+  foreground: #eeeeee;
+  font: "Roboto 11";
+}
+listview {
+  lines: 20;
+  columns: 1;
+  border:    0;
+}
+window {
+  location: north west;
+  width: 15em;
+  border-radius: 10px; 
+  border: 0;
+  border-color: #ca9ee6;
+  // background-color: #141a1bcc;
+  background-color: #2d2d3aee;
+  x-offset: 6;
+  y-offset: 6;
+}
+element selected.normal {
+    text-color: #141a1b;
+ }

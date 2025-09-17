@@ -1,0 +1,111 @@
+format = """
+$os$directory(bold blue)$git_branch$git_status[❯](bold yellow)[❯](bold purple)[❯](bold blue) """
+
+right_format = """
+$status\
+$cmd_duration\
+$python\
+"""
+
+scan_timeout = 60
+add_newline = false
+
+[line_break]
+disabled = true
+
+[directory]
+style = "bold blue"
+truncation_symbol = "…/"
+
+[cmd_duration]
+format = "[$duration]($style) "
+
+[status]
+disabled = false
+# format = "[$symbol $status]($style) "
+format = '[$symbol$status_common_meaning$status_signal_name$status_maybe_int]($style) '
+symbol = "[✘](fg:red)"
+success_symbol = "[✔](fg:green)"
+not_found_symbol = ""
+not_executable_symbol = ""
+sigint_symbol = "ﭦ"
+map_symbol = true
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+
+[package]
+format = "[$symbol$version]($style) "
+symbol = " "
+
+[python]
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+symbol = " "
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+
+[php]
+format = "[$symbol($version )]($style)"
+symbol = " "
+
+[java]
+format = "[${symbol}(${version} )]($style)"
+symbol = " "
+
+[rust]
+format = "[$symbol($version )]($style)"
+
+[golang]
+format = "[$symbol($version )]($style)"
+symbol = " "
+
+[os]
+disabled = false
+format = ' [$symbol]($style) '
+style = "bold green"
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "

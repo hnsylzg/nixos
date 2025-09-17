@@ -1,0 +1,111 @@
+{
+  // "logo": {
+  //   "type": "raw",
+  //   "source": "~/.config/fastfetch/images/hypr.sixel",
+  //   "height": 20,
+  //   "width": 25
+  // },
+  "logo": {
+    "source": "~/.config/fastfetch/images/hypr.png",
+    "height": 18
+  },
+  "display": {
+    "separator": " : "
+  },
+  "modules": [
+    // 👋 Introduction
+    {
+      "type": "title",
+      "key": "  Hi there! 👋",
+      "keyColor": "white"
+    },
+    {
+      "type": "custom",
+      "format": "┌──────────────────────────────────────────┐"
+    },
+    // 🖥️ System Information
+    {
+      "type": "os",
+      "key": "   OS",
+      "keyColor": "red"
+    },
+    {
+      "type": "kernel",
+      "key": "   Kernel",
+      "keyColor": "red"
+    },
+    {
+      "type": "packages",
+      "key": "   Packages",
+      "keyColor": "green"
+    },
+    {
+      "type": "wm",
+      "key": "   WM",
+      "keyColor": "green"
+    },
+    {
+      "type": "terminal",
+      "key": "   Terminal",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "TerminalFont",
+      "key": "   Font",
+      "keyColor": "cyan"
+    },
+    {
+      "type": "custom",
+      "format": "└──────────────────────────────────────────┘"
+    },
+    // ⚙️ Performance & Runtime
+    {
+      "type": "custom",
+      "format": "┌──────────────────────────────────────────┐"
+    },
+    {
+      "type": "cpu",
+      "format": "{1}",
+      "key": "   CPU",
+      "keyColor": "red"
+    },
+    {
+      "type": "uptime",
+      "key": "   Uptime",
+      "keyColor": "red"
+    },
+    {
+      "type": "Processes",
+      "key": "   Processes",
+      "format": "{1} running",
+      "keyColor": "green"
+    },
+    {
+      "type": "memory",
+      "key": "   Memory",
+      "keyColor": "green"
+    },
+    {
+      "type": "shell",
+      "key": "  Shell",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "theme",
+      "key": "  Theme",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "custom",
+      "format": "└──────────────────────────────────────────┘"
+    },
+    // 🌈 Visuals
+    "break",
+    {
+      "type": "colors",
+      "paddingLeft": 2,
+      "symbol": "circle"
+    },
+    "break"
+  ]
+}

@@ -1,0 +1,1 @@
+chafa -f sixel -s 40x20 image.png > image.sixel
