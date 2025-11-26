@@ -12,7 +12,6 @@
     accept-flake-config = true;
   };
 
-
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
