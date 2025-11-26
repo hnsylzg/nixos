@@ -9,7 +9,7 @@
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
-    accept-flake-config = true;
+    # accept-flake-config = true;
   };
 
   inputs = {
