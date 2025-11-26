@@ -70,13 +70,31 @@
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
-      extra-trusted-users = [ "lzg" ];
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
       # Opinionated: disable global registry
       flake-registry = "";
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
+
+      auto-optimise-store = true;
+      extra-trusted-users = [ "lzg" ];
+      # the system-level substituers & trusted-public-keys
+      # given the users in this list the right to specify additional substituters via:
+      #    1. `nixConfig.substituers` in `flake.nix`
+      substituters = [
+        # cache mirror located in China
+        # status: https://mirror.sjtu.edu.cn/
+        # "https://mirror.sjtu.edu.cn/nix-channels/store"
+        # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+        # status: https://mirrors.ustc.edu.cn/status/
+        "https://mirrors.ustc.edu.cn/nix-channels/store"
+        "https://cache.nixos.org"
+      ];
+      trusted-public-keys = [
+        # the default public key of cache.nixos.org, it's built-in, no need to add it here
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      ];
     };
     # Opinionated: disable channels
     channel.enable = false;
