@@ -56,7 +56,6 @@
     fzf
     jq
     # 添加其他你需要的用户级软件包
-    neovim
     waybar
     rofi-wayland
     kitty
@@ -73,6 +72,14 @@
     waypaper
     swww
     ncmpcpp
+    luarocks
+    lazygit
+    nodejs
+    python3
+    python3Packages.pip
+    python3Packages.virtualenv
+    # python3Packages.pynvim
+
     # 开发工具、GUI应用等
   ];
   # Add stuff for your user as you see fit:
@@ -109,6 +116,17 @@
     enable = true;
     userName = "hnsylzg";
     userEmail = "hnsylzg@gmail.com";
+  };
+
+  programs.neovim = {
+    enable = true;
+    plugins = with pkgs.vimPlugins; [
+      # Make sure you're using the latest version
+      nvim-treesitter
+    ];
+    extraPackages = with pkgs; [
+      tree-sitter
+    ];
   };
 
   # Nicely reload system units when changing configs
