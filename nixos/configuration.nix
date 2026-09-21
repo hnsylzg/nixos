@@ -153,6 +153,7 @@
       initialHashedPassword = "$6$kWg6iZqd4bCiQYSg$1dxeAroSKDsT7cDVWavdhCzxS.mv4reYtMCofQ6.W6vFZYMHXAc3mWNYLl5NK0p7kKTnWuzlFIeK3ntOzWhka1";
       description = "lizhengang";
       isNormalUser = true;
+      shell = pkgs.fish;
       openssh.authorizedKeys.keys = [
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
@@ -241,8 +242,9 @@
 	# accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # 锁定到 580 长期支持分支（production），支持 GTX 1080（Pascal 架构）；
+    # stable 未来可能随 NVIDIA 新分支漂移到 590，而 590 不再支持 Pascal。
+    package = config.boot.kernelPackages.nvidiaPackages.production;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

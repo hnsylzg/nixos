@@ -78,6 +78,7 @@
     python3
     python3Packages.pip
     python3Packages.virtualenv
+    neovim
     # python3Packages.pynvim
 
     # 开发工具、GUI应用等
@@ -118,15 +119,31 @@
     userEmail = "hnsylzg@gmail.com";
   };
 
-  programs.neovim = {
-    enable = true;
-    plugins = with pkgs.vimPlugins; [
-      # Make sure you're using the latest version
-      nvim-treesitter
-    ];
-    extraPackages = with pkgs; [
-      tree-sitter
-    ];
+  # 声明式部署现有 dotfiles（配置源位于 flake 内的 ../config，相对本文件）
+  xdg.configFile = {
+    # 顶层 flag / 配置文件
+    "starship.toml".source = ../config/starship.toml;
+    "chrome-flags.conf".source = ../config/chrome-flags.conf;
+    "code-flags.conf".source = ../config/code-flags.conf;
+    "electron-flags.conf".source = ../config/electron-flags.conf;
+    "qq-flags.conf".source = ../config/qq-flags.conf;
+    "typora-flags.conf".source = ../config/typora-flags.conf;
+    "spotify-launcher.conf".source = ../config/spotify-launcher.conf;
+    "xdg-terminals.list".source = ../config/xdg-terminals.list;
+    # 程序配置目录
+    "kitty".source = ../config/kitty;
+    "hypr".source = ../config/hypr;
+    "rofi".source = ../config/rofi;
+    "waybar".source = ../config/waybar;
+    "nvim".source = ../config/nvim;
+    "fastfetch".source = ../config/fastfetch;
+    # fish（排除 fish_variables，避免只读符号链接导致 universal variables 无法写入）
+    "fish/config.fish".source = ../config/fish/config.fish;
+    "fish/aliases.fish".source = ../config/fish/aliases.fish;
+    "fish/clean_up.sh".source = ../config/fish/clean_up.sh;
+    "fish/upall.sh".source = ../config/fish/upall.sh;
+    "fontconfig".source = ../config/fontconfig;
+    "xfce4".source = ../config/xfce4;
   };
 
   # Nicely reload system units when changing configs
