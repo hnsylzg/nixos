@@ -1,5 +1,6 @@
+# 这里的颜色定义参考了 starship-colors.toml 的调色板逻辑
 format = """
-$os$directory(bold blue)$git_branch$git_status[❯](bold yellow)[❯](bold purple)[❯](bold blue) """
+$os$directory(bold #edb1ff)$git_branch$git_status[❯](bold #edb1ff)[❯](bold #e3badb)[❯](bold #f5b4d7) """
 
 right_format = """
 $status\
@@ -14,18 +15,24 @@ add_newline = false
 disabled = true
 
 [directory]
-style = "bold blue"
+style = "bold #edb1ff"
 truncation_symbol = "…/"
+# 继承自 starship-colors.toml 的目录替换
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
 
 [cmd_duration]
 format = "[$duration]($style) "
+style = "#d0c2d0"
 
 [status]
 disabled = false
-# format = "[$symbol $status]($style) "
 format = '[$symbol$status_common_meaning$status_signal_name$status_maybe_int]($style) '
-symbol = "[✘](fg:red)"
-success_symbol = "[✔](fg:green)"
+symbol = "[✘](fg:#ffb4ab)"
+success_symbol = "[✔](fg:#edb1ff)"
 not_found_symbol = ""
 not_executable_symbol = ""
 sigint_symbol = "ﭦ"
@@ -33,38 +40,49 @@ map_symbol = true
 
 [git_branch]
 format = "[$symbol$branch]($style) "
+style = "bold #e3badb"
 
 [package]
 format = "[$symbol$version]($style) "
 symbol = " "
+style = "#f5b4d7"
 
 [python]
+# 结合了 starship.toml 的格式和 starship-colors.toml 的前缀
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 symbol = " "
+style = "#edb1ff"
+pyenv_prefix = 'venv'
 
 [nodejs]
 format = "[$symbol($version )]($style)"
+style = "#e3badb"
 
 [php]
 format = "[$symbol($version )]($style)"
 symbol = " "
+style = "#f5b4d7"
 
 [java]
 format = "[${symbol}(${version} )]($style)"
 symbol = " "
+style = "#edb1ff"
 
 [rust]
 format = "[$symbol($version )]($style)"
+style = "#e3badb"
 
 [golang]
 format = "[$symbol($version )]($style)"
 symbol = " "
+style = "#f5b4d7"
 
 [os]
 disabled = false
 format = ' [$symbol]($style) '
-style = "bold green"
+style = "bold #edb1ff"
 
+# 完整保留你 starship.toml 中的所有图标
 [os.symbols]
 Alpaquita = " "
 Alpine = " "
