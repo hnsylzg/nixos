@@ -79,6 +79,9 @@
     python3Packages.pip
     python3Packages.virtualenv
     neovim
+    # 提供给 nvim-treesitter 的 tree-sitter CLI；用 nix 版可避免它去下载/调用
+    # 非 nix 的动态链接二进制（配合系统层 programs.nix-ld 使用）
+    tree-sitter
     # python3Packages.pynvim
 
     # 开发工具、GUI应用等

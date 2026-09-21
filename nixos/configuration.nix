@@ -177,6 +177,14 @@
 
   programs.hyprland.enable = true;
 
+  # 允许运行"外来"的通用动态链接二进制（nix-ld）。
+  # nvim-treesitter 运行时编译语法解析器、mason 下载的 LSP 等都会去调用非 nix 的
+  # 动态链接可执行文件，NixOS 默认拒绝启动它们，报：
+  #   Could not start dynamically linked executable: ...
+  #   NixOS cannot run dynamically linked executables ... https://nix.dev/permalink/stub-ld
+  # 开启 nix-ld 即为这类程序提供兼容的动态链接器与运行库。
+  programs.nix-ld.enable = true;
+
   services.greetd = {
     enable = true;
     settings = {
