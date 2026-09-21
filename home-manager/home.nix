@@ -57,7 +57,7 @@
     jq
     # 添加其他你需要的用户级软件包
     waybar
-    rofi-wayland
+    rofi
     kitty
     fish
     starship
@@ -115,8 +115,10 @@
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
-    userName = "hnsylzg";
-    userEmail = "hnsylzg@gmail.com";
+    settings.user = {
+      name = "hnsylzg";
+      email = "hnsylzg@gmail.com";
+    };
   };
 
   # 声明式部署现有 dotfiles（配置源位于 flake 内的 ../config，相对本文件）
