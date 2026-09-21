@@ -200,7 +200,8 @@
 
   programs.thunar = {
     enable = true;
-    plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
+    # thunar-archive-plugin / thunar-volman 已从 pkgs.xfce.* 提到顶层
+    plugins = with pkgs; [ thunar-archive-plugin thunar-volman ];
   };
 
   xdg.mime.defaultApplications = { "inode/directory" = "thunar.desktop"; };
