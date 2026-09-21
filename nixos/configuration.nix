@@ -83,12 +83,7 @@
       # given the users in this list the right to specify additional substituters via:
       #    1. `nixConfig.substituers` in `flake.nix`
       substituters = [
-        # cache mirror located in China
-        # status: https://mirror.sjtu.edu.cn/
-        # "https://mirror.sjtu.edu.cn/nix-channels/store"
-        # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        # status: https://mirrors.ustc.edu.cn/status/
-        "https://mirrors.ustc.edu.cn/nix-channels/store"
+        # 只用官方源：USTC/TUNA 等 nix-channels 镜像不完整，缺包会刷 cache-miss 噪音，故不启用
         "https://cache.nixos.org"
       ];
       trusted-public-keys = [
