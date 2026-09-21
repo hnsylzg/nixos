@@ -175,6 +175,11 @@
     };
   };
 
+  # users.users.lzg.shell = pkgs.fish 需要此项：否则 NixOS 断言失败
+  # （fish 会缺少 nix profile 的 PATH，可能导致无法登录）。
+  # 这是系统级 /etc/fish，与 home-manager 接管的 ~/.config/fish 不冲突。
+  programs.fish.enable = true;
+
   programs.hyprland.enable = true;
 
   services.greetd = {
