@@ -140,7 +140,13 @@
     "hypr".source = ../config/hypr;
     "rofi".source = ../config/rofi;
     "waybar".source = ../config/waybar;
-    "nvim".source = ../config/nvim;
+    # nvim：逐项符号链接，不要整目录接管。
+    # 原因：LazyVim 需要在 ~/.config/nvim/lazyvim.json 里读写 version/extras/news 状态；
+    # 整目录符号链接时该文件是只读 → 写入失败，报 "Error executing vim.schedule lua callback"。
+    # 逐项接管后 lazyvim.json 落在真实可写的 ~/.config/nvim/ 下，LazyVim 可自行管理。
+    "nvim/init.lua".source = ../config/nvim/init.lua;
+    "nvim/stylua.toml".source = ../config/nvim/stylua.toml;
+    "nvim/lua".source = ../config/nvim/lua;
     "fastfetch".source = ../config/fastfetch;
     # fish（排除 fish_variables，避免只读符号链接导致 universal variables 无法写入）
     "fish/config.fish".source = ../config/fish/config.fish;
