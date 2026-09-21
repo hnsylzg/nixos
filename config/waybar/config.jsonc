@@ -248,7 +248,8 @@
     "tooltip": false
   },
   "custom/wf-recorder": {
-    "interval": "once",
+    // 每秒轮询一次（原来 "once" + signal 的方式，一旦 pkill -RTMIN+8 没送达就不显示）
+    "interval": 1,
     "return-type": "json",
     "format": "{}",
     "exec": "echo '{\"class\": \"recording\",\"text\":\"󰑊\",\"tooltip\":\"press $mod+Esc to stop recording\"}'",
