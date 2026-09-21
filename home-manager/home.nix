@@ -172,13 +172,16 @@
     # 这样 mpd 才能写 mpd.db / mpdstate / playlists（整目录符号链接到 store 会只读）。
     "mpd/mpd.conf".source = ../config/mpd/mpd.conf;
     "ncmpcpp".source = ../config/ncmpcpp;
+    "swappy".source = ../config/swappy;
   };
 
-  # mpd 需要这些目录存在且可写
+  # 这些目录必须存在：mpd 音乐库、录屏输出目录、swappy 截图保存目录
   systemd.user.tmpfiles.rules = [
     "d %h/Music/Music 0755 - - -"
     "d %h/.config/mpd 0755 - - -"
     "d %h/.config/mpd/playlists 0755 - - -"
+    "d %h/Videos 0755 - - -"
+    "d %h/Pictures/Screenshots 0755 - - -"
   ];
 
   # waybar 交由 systemd 用户服务托管（对齐 dotfiles 的 systemd 启动方式），

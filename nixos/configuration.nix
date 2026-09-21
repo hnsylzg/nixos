@@ -209,6 +209,15 @@
   services.gvfs.enable = true;
   services.tumbler.enable = true;
 
+  # PipeWire：wf-recorder --audio（带声录屏）、mpd 的 pulse 输出、
+  # waybar 音量模块 / pulsemixer 都依赖它；此前全仓没有任何音频栈配置。
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;   # 提供 pipewire-pulse，兼容 pulse 客户端
+  };
+
   environment.etc."issue".text = "\\S{prettyName} \\r (\\l)";
 
   environment.etc = {

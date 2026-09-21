@@ -16,11 +16,15 @@ countdown() {
 notify() {
   line=$1
   shift
-  notify-send "Recording" "${line}" -i /usr/share/icons/Papirus-Dark/32x32/devices/camera-video.svg $*
+  # NixOS 没有 /usr/share/icons，图标只能按名字查找（找不到就退化成无图标，不影响发送）
+  notify-send "Recording" "${line}" -i camera-video $*
 }
 
 if [ $status != 0 ]; then
   target_path=$(xdg-user-dir VIDEOS)
+  # 目录不存在时 wf-recorder 会打不开输出文件直接退出，这里兜底并建好
+  [ -z "$target_path" ] && target_path="$HOME/Videos"
+  mkdir -p "$target_path"
   timestamp=$(date +'recording_%Y%m%d-%H%M%S')
 
   notify "Select a region to record" -t 1000
