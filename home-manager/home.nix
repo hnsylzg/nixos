@@ -93,6 +93,9 @@
     ncmpcpp
     mpd
     dunst
+    # waybar 会调用：蓝牙管理 TUI（蓝牙模块 on-click）、日历 TUI（时钟右键）
+    bluetuith
+    calcurse
     luarocks
     lazygit
     nodejs

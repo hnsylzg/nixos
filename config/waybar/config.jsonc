@@ -88,7 +88,9 @@
   },
   "bluetooth": {
     "format": " {status}",
-    "format-disabled": "󰂲 {status}",
+    // 空字符串 = 隐藏模块：没有蓝牙适配器 / 蓝牙被禁用时不占位置
+    "format-no-controller": "",
+    "format-disabled": "",
     "format-connected": " {device_alias}",
     "format-connected-battery": " {device_alias} {device_battery_percentage}%",
     // "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
