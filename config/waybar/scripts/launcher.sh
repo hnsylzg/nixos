@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [[ ! $(pidof rofi) ]]; then
-  rofi -show drun -config ~/.config/rofi/menu.rasi
+if [[ ! $(pidof fuzzel) ]]; then
+  fuzzel --config ~/.config/fuzzel/launcher.ini
 else
-  pkill rofi
+  pkill fuzzel
 fi

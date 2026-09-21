@@ -58,6 +58,7 @@
     # 添加其他你需要的用户级软件包
     waybar
     rofi
+    fuzzel
     kitty
     fish
     starship
@@ -70,7 +71,7 @@
     wl-clipboard
     vscode
     waypaper
-    swww
+    awww
     ncmpcpp
     luarocks
     lazygit
@@ -140,6 +141,7 @@
     "hypr".source = ../config/hypr;
     "rofi".source = ../config/rofi;
     "waybar".source = ../config/waybar;
+    "fuzzel".source = ../config/fuzzel;
     # nvim：逐项符号链接，不要整目录接管。
     # 原因：LazyVim 需要在 ~/.config/nvim/lazyvim.json 里读写 version/extras/news 状态；
     # 整目录符号链接时该文件是只读 → 写入失败，报 "Error executing vim.schedule lua callback"。

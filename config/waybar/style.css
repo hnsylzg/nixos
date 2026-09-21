@@ -71,6 +71,27 @@ window#waybar.hidden {
     /*#252733;*/
 }
 
+/* 分组容器：group/hardware（抽屉）与 group/player，由容器提供背景胶囊，子模块透明 */
+#hardware {
+    background: #252733;
+    margin-top: 6px;
+    margin-left: 8px;
+    margin-bottom: 0px;
+    padding: 0 6px;
+    border-radius: 10px;
+    transition: none;
+}
+
+#player {
+    background: #2d2d3a;
+    margin-top: 6px;
+    margin-left: 8px;
+    margin-bottom: 0px;
+    padding: 0 2px;
+    border-radius: 10px;
+    transition: none;
+}
+
 #tags {
     margin-top: 6px;
     margin-left: 12px;
@@ -149,7 +170,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #96cdfb;
-    background-color: #252733;
+    background: transparent;
 }
 
 #pulseaudio {
@@ -240,7 +261,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #7dda9f;
-    background-color: #252733;
+    background: transparent;
 }
 
 #cpu {
@@ -252,7 +273,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #f48f8f;
-    background-color: #252733;
+    background: transparent;
 }
 
 #disk {
@@ -264,7 +285,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #e4bd86;
-    background: #2a3139;
+    background: transparent;
 }
 
 #clock {
