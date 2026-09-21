@@ -126,6 +126,10 @@
     ];
   };
 
+  # 关掉激活时那句 "There are 370 unread and relevant news items"。
+  # 想读的时候手动跑一次 `home-manager news` 即可。
+  news.display = "silent";
+
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git = {
