@@ -164,17 +164,17 @@ hl.config({
 ---- AUTOSTART (replaces exec-once) ----
 -------------------
 hl.on("hyprland.start", function()
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+    hl.exec_cmd("systemctl --user start hyprland-session.target")
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
     hl.exec_cmd("fcitx5 -d")
     hl.exec_cmd("waypaper --restore")
-    hl.exec_cmd("waybar")
     hl.exec_cmd("nm-applet")
     hl.exec_cmd("nice -n 15 thunar --daemon")
     hl.exec_cmd("ionice -c 3 playerctld daemon")
     hl.exec_cmd([[wl-clip-persist --clipboard regular --all-mime-type-regex '(?i)^(?!image/x-inkscape-svg).+']])
     hl.exec_cmd("wl-paste --watch cliphist store")
-    hl.exec_cmd([[until pgrep -x waybar >/dev/null; do sleep 0.3; done; sleep 2; wl-paste --watch pkill -RTMIN+9 waybar]])
+    hl.exec_cmd("wl-paste --watch pkill -RTMIN+9 waybar")
     hl.exec_cmd([[swayidle -w timeout 300 'swaylock -f -c 000000 --show-failed-attempts --fade-in 0.2 --grace 5 --grace-no-mouse --effect-vignette 0.5:0.5 --effect-blur 7x5 --ignore-empty-password --screenshots --clock' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' timeout 900 'systemctl suspend']])
 end)
 

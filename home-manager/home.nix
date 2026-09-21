@@ -161,6 +161,40 @@
     "xfce4".source = ../config/xfce4;
   };
 
+  # waybar 交由 systemd 用户服务托管（对齐 dotfiles 的 systemd 启动方式），
+  # 不再在 hyprland 里 exec-once 直接拉起。
+  # 注意：dotfiles 那份是 Arch 风格（ExecStart=/usr/bin/waybar），NixOS 没有 /usr/bin，
+  # 故这里用 home-manager 声明式生成等价单元，路径走 nix store。
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Waybar status bar";
+      Documentation = "https://github.com/Alexays/Waybar";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 1.5";
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      ReloadSignal = "SIGUSR2"; # waybar 用 SIGUSR2 重载配置，避免依赖 /bin/kill
+      Restart = "on-failure";
+      RestartSec = 1;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
+  # 对应 dotfiles 的 hyprland-session.target：hyprland autostart 拉起它，
+  # 它 Requires graphical-session.target，进而带起 waybar.service
+  systemd.user.targets.hyprland-session = {
+    Unit = {
+      Description = "Hyprland Session Target";
+      Requires = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+  };
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
