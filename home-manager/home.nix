@@ -69,6 +69,8 @@
     btop
     pulsemixer
     wl-clipboard
+    cliphist
+    wl-clip-persist
     vscode
     waypaper
     awww

@@ -1,523 +1,211 @@
+/* 引入静态配色变量（不再由 matugen 生成） */
+@import "colors.css";
+
 @keyframes blink-critical {
     50% {
-        color: grey;
+        color: @on_surface_variant;
     }
-
     to {
-        color: @error_color;
+        /* M3 Error 角色 */
+        color: @error; 
     }
 }
 
 * {
+    font-family: "monospace";
+    font-size: 12px;
+    font-weight: 500;
     border: none;
-    border-radius: 10px;
-    font-family: monospace, FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    min-height: 10px;
-    /*font-weight:bold;*/
 }
 
 window#waybar {
     background: transparent;
 }
 
-window#waybar.hidden {
-    opacity: 0.2;
-}
+/* 取消注释加上wayabr背景,需要将config.jsonc总高度改height 35改为47 */
+/* window>box { */
+/*     background-color: alpha(@surface_container,0.8); */
+/*     margin-top: 6px; */
+/*     margin-left: 6px; */
+/*     margin-right: 6px; */
+/*     padding-bottom:6px; */
+/*     border-radius: 13px; */
+/* } */
 
-#workspaces button {
-    background: #252733;
-    padding: 0 10px;
-    /*color: #c2caea;*/
-    color: #dba986;
+/* 基础模块样式 */
+#network, #bluetooth, #pulseaudio, #battery, #backlight,
+#clock, #keyboard-state, #language, #submap, #player,
+#idle_inhibitor, #custom-clipboard, #custom-playerctl,
+#custom-playerlabel, #custom-update, #custom-powermenu,
+#tray, #custom-wallpaper, #custom-media, #custom-wf-recorder,
+#custom-launcher, #custom-cava-internal, #hardware, #window  {
+    background: alpha(@surface_container, 0.8);
+    color: @on_surface;
     margin-top: 6px;
-    margin-left: 8px;
-    /*padding-left: 10px;
-	padding-right: 10px;*/
     margin-bottom: 0px;
-    border-radius: 10px;
+    margin-left: 6px;
+    padding: 2px 10px;
+    /* padding: 3px 10px; */
+    /* padding: 3px 10px 2px 10px; */
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    /* border: 1px solid @primary; */
 }
-
-#workspaces button.focused {
-    color: #0a4511;
-    background: #83a3a0;
-}
-
-#workspaces button.active {
-    color: #0a4511;
-    background: #83a3a0;
-}
-
-#workspaces button:hover {
-    box-shadow: inherit;
-    text-shadow: inherit;
-}
-
-#workspaces button:hover {
-    background: #fdbdbd;
-    border: #e69e9e;
-    padding: 0 5px;
-}
-
-#window {
-    margin-top: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #7dda9f;
-    background: rgba(0, 0, 0, 0);
-    /*#252733;*/
-}
-
-/* 分组容器：group/hardware（抽屉）与 group/player，由容器提供背景胶囊，子模块透明 */
+/* --- 硬件信息 --- */
 #hardware {
-    background: #252733;
-    margin-top: 6px;
-    margin-left: 8px;
-    margin-bottom: 0px;
     padding: 0 6px;
-    border-radius: 10px;
-    transition: none;
+}
+#cpu, #temperature, #memory, #disk {
+    padding: 0 6px;
 }
 
-#player {
-    background: #2d2d3a;
-    margin-top: 6px;
-    margin-left: 8px;
-    margin-bottom: 0px;
-    padding: 0 2px;
-    border-radius: 10px;
-    transition: none;
-}
-
-#tags {
-    margin-top: 6px;
-    margin-left: 12px;
-    font-size: 4px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    background: #161320;
-    transition: none;
-}
-
-#tags button {
-    transition: none;
-    color: #B5E8E0;
-    background: #B5E8E0;
-    font-size: 16px;
-    border-radius: 2px;
-}
-
-#tags button.occupied {
-    transition: none;
-    color: #F28FAD;
-    background: transparent;
-    font-size: 4px;
-}
-
-#tags button.focused {
-    color: #ABE9B3;
-    border-top: 2px solid #ABE9B3;
-    border-bottom: 2px solid #ABE9B3;
-}
-
-#tags button:hover {
-    transition: none;
-    box-shadow: inherit;
-    text-shadow: inherit;
-    color: #FAE3B0;
-    border-color: #E8A2AF;
-    color: #E8A2AF;
-}
-
-#tags button.focused:hover {
-    color: #E8A2AF;
-}
-
-#network {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 12px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    /*color: #cd79c1;*/
-    color: #e4bd86;
-    background: #252733;
-}
-
-#bluetooth {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #53b0cf;
-    background-color: #252733;
-}
-
-#temperature {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #96cdfb;
-    background: transparent;
-}
-
-#pulseaudio {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #ac92c6;
-    background: #2d2d3a;
-}
-
-#battery {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #7dda9f;
-    background: #2d2d3a;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate
-}
-
-#battery.charging,
-#battery.plugged {
-    color: #7dda9f;
-}
-
-#battery.warning {
-    color: @warning_color;
-}
-
-#battery.critical {
-    color: @error_color;
-}
-
+/* 1. 主角模块 */
+/* #clock { color: @primary; } */
+#custom-launcher { font-family: "Symbols Nerd Font"; font-size: 13px; }
+#custom-update { color: @primary }
+#custom-clipboard { padding-left: 11px; font-family: "Symbols Nerd Font"; }
+#idle_inhibitor { font-family: "Symbols Nerd Font"; }
+/* 2. 状态模块 */
+/* #network, #bluetooth { color: @secondary; } */
+/* #memory, #cpu, #disk { color: @tertiary; } */
+/* #pulseaudio, #backlight { color: @primary_fixed_dim; } */
+/* 3. 电池状态 */
+#battery { color: @secondary; }
+#battery.charging, #battery.plugged { color: @primary; }
+#battery.warning { color: @tertiary; }
+#battery.critical { color: @error; }
 #battery.critical.discharging {
     animation-name: blink-critical;
-    animation-duration: 3s;
+    animation-duration: 2s; 
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
-@keyframes blink {
-    to {
-        background-color: #BF616A;
-        color: #B5E8E0;
-    }
-}
-
-#backlight {
+/* 4. 工作区样式 */
+#workspaces {
+    background: alpha(@surface_container, 0.8); /* 深色背景 */
     margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
     margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #87ceeb;
-    /*color: #f5e0dc;*/
-    background: #2a3139;
+    margin-left: 6px;
+    padding: 0; /* 增加左右内边距，让内部小胶囊不贴边 */
+    border-radius: 12px; 
+    /* transition: all 0.3s ease; */
+    /* font-size: 8px; */
+    /* border: 1px solid @primary; */
 }
-
-#tray {
-    margin-top: 6px;
+#workspaces button {
+    background: alpha(@on_surface, 0.3);
+    /* color: @surface_container_high; */
+    margin: 7px 3px; /* 按钮高度,随height=33改6,height=35改7 */
+    padding: 0 6px;
+    min-width: 8px;
+    min-height: 8px;
+    /* transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    /* transition: all 0.3s ease; */
+    /* transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1); */
+}
+#workspaces button:first-child {
+    /* 移除第一个按钮的左边距，让它直接贴在 #workspaces 的 padding 上 */
     margin-left: 8px;
-    padding-left: 10px;
-    margin-right: 6px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #aea4d0;
-    /*background: #2d2d3a;*/
-    background: #45495c;
 }
-
-#memory {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 12px;
-    border-radius: 10px;
-    transition: none;
-    color: #7dda9f;
-    background: transparent;
+ #workspaces button:last-child {
+    /* 移除最后一个按钮的右边距 */
+    margin-right: 8px;
 }
-
-#cpu {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #f48f8f;
-    background: transparent;
-}
-
-#disk {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #e4bd86;
-    background: transparent;
-}
-
-#clock {
-    margin-top: 6px;
-    margin-left: 8px;
-    margin-right: 6px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #e68da5;
-    background: #292c3a;
-}
-
-#keyboard-state {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #ac92c6;
-    background: #2d2d3a;
-}
-
-#mpd {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #ac92c6;
-    background: #2d2d3a;
-}
-
-#mpd.paused {
-    color: #414868;
-    font-style: italic;
-}
-
-#mpd.stopped {
-    background: transparent;
-}
-
-#mpd {
-    color: #c0caf5;
-}
-
-#language {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #ac92c6;
-    background: #2d2d3a;
+#workspaces button.focused, #workspaces button.active {
+    /* 选中状态使用 Primary 容器，产生明亮的点击感 */
+    background: @primary;
     min-width: 16px;
 }
-
-#idle_inhibitor {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #ac92c6;
-    background: #2d2d3a;
+#workspaces button.focused:hover, #workspaces button.active:hover {
+    background: @primary;
+}
+#workspaces button:hover {
+    background: alpha(@on_surface, 0.7);
+}
+#workspaces button label {
+    color: transparent; /* 完全透明 */
+    margin: 0;          /* 彻底消除间距 */
+    padding: 0;
+    font-size: 0;       /* 字号设为 0，不占宽度 */
 }
 
-#custom-clipboard {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 12px;
-    border-radius: 10px;
-    transition: none;
-    color: #f2cdcd;
-    /*color: #e4bd86;*/
-    background: #2a3139;
-}
-
-#custom-launcher {
-    font-size: 20px;
-    margin-top: 6px;
-    margin-left: 6px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 10px;
-    transition: none;
-    color: #96cdfb;
-    /* color: #e17f69; */
-    /*background: #312e2e;*/
-}
-
-#custom-power {
-    font-size: 20px;
-    margin-top: 6px;
-    margin-left: 8px;
-    margin-right: 8px;
-    padding-left: 10px;
-    padding-right: 5px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #161320;
-    background: #F28FAD;
-}
-
-#custom-wallpaper {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #161320;
-    background: #C9CBFF;
-}
-
-#custom-media {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #161320;
-    background: #F2CDCD;
-}
-
-#custom-playerctl {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 3px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #c0caf5;
-    /*color: #bb9af7;*/
-}
-
-#custom-playerctl.Paused {
-    color: #414868;
-    font-style: italic;
-}
-
-#custom-playerctl.Stopped {
-    color: transparent;
+/* 窗口标题 */
+/* #window {  */
+/*     background: transparent;  */
+/* } */
+window#waybar.empty #window {
     background: transparent;
+    margin: 0;
+    padding: 0;
 }
 
-#custom-playerlabel {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 3px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #c0caf5;
-}
-
-#custom-cava-internal {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    /*color: #ffff00;*/
-}
-
-#custom-update {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #c0caf5;
-    background: #2d2d3a;
-}
+/* 5. 托盘与特殊插件 */
+#tray { color: @on_surface; }
 
 #custom-powermenu {
-    margin-top: 6px;
-    margin-left: 0px;
-    margin-right: 8px;
-    padding-left: 10px;
-    padding-right: 14px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: rgb(242, 143, 173);
-    background: #2d2d3a;
+    /* background: alpha(@error_container,0.8); */
+    /* color: @error; */
+    color: @primary;
+    margin-right: 6px;
+    font-family: "Symbols Nerd Font";
 }
 
+/* 6. 音乐播放器 (MPD / Playerctl) */
+#player {
+  padding: 0 2px;
+  border-radius: 14px;
+}
+#custom-playerctl {
+  background: @primary;
+  color: @on_primary;
+  margin: 2px 0;
+  padding: 0;
+  min-width: 25px;
+  font-family: "Symbols Nerd Font";
+  font-size: 14px;
+}
+#custom-playerctl.Paused, #custom-playerctl.Stopped {
+  background: alpha(@primary, 0.1);
+  color: @primary;
+}
+#custom-playerctl.Stopped {
+  background: transparent;
+  color: @on_surface;
+}
+#custom-playerlabel {
+    background: transparent;
+    color: @on_surface;
+    margin: 3px 0;
+}
+#custom-playerlabel.Paused {
+    color: @outline;
+    font-style: italic;
+}
+#custom-playerlabel.Stopped { 
+  color: transparent;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+}
+#custom-cava-internal { background: transparent; }
+
 #submap {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
-    transition: none;
-    color: #F2CDCD;
+    /* background: transparent; */
+    /* color: @on_tertiary_container; */
+    color: @primary;
     font-style: italic;
 }
 
 #custom-wf-recorder {
-    margin-top: 6px;
-    margin-left: 8px;
-    padding-left: 10px;
-    margin-bottom: 0px;
-    padding-right: 12px;
-    border-radius: 10px;
-    transition: none;
-    color: #f48f8f;
+    background: transparent;
+    color: @error;
     font-size: 20px;
-    /*color: #e4bd86;*/
-    /* background: #2a3139; */
 }
+
+tooltip label {
+    padding: 0;
+}
+

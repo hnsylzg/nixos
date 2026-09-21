@@ -7,7 +7,7 @@ local terminal    = "kitty"
 local fileManager = "thunar"
 local browser     = "google-chrome-stable"
 local code        = "code"
-local menu        = "rofi -show combi -combi-modi \"drun,run\" -show-icons -hover-select -me-select-entry '' -me-accept-entry !MousePrimary"
+local menu        = "fuzzel"
 local locking     = "swaylock -f -c 000000 --show-failed-attempts --fade-in 0.2 --grace 5 --grace-no-mouse --effect-vignette 0.5:0.5 --effect-blur 7x5 --ignore-empty-password --screenshots --clock"
 
 -------------------
