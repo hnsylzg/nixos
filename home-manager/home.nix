@@ -91,6 +91,7 @@
     waypaper
     awww
     ncmpcpp
+    mpd
     luarocks
     lazygit
     nodejs
@@ -109,29 +110,10 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
 
-  services.mpd = {
-    enable = true;
-    # 与 ~/.config/ncmpcpp/config 的 mpd_music_dir 保持一致
-    musicDirectory = "/home/lzg/Music/Music";
-    extraConfig = ''
-      # 走 pipewire-pulse（与 dotfiles 的 type "pulse" 一致）
-      audio_output {
-        type "pulse"
-        name "Pulse Output"
-      }
-      # 供可视化工具读取的 fifo（与 dotfiles 一致）
-      audio_output {
-        type    "fifo"
-        name    "my_fifo"
-        path    "/tmp/mpd.fifo"
-        format  "44100:16:2"
-      }
-    '';
-
-    # Optional:
-    # network.listenAddress = "any"; # if you want to allow non-localhost connections
-    # network.startWhenNeeded = true; # systemd feature: only start MPD service upon connection to its socket
-  };
+  # mpd 不用 services.mpd：它会生成自己的 ~/.config/mpd/mpd.conf，
+  # 与下面部署的 dotfiles 版 mpd.conf 撞车（home-manager 会报 collision）。
+  # 改用 dotfiles 的做法：部署 mpd.conf + 用 systemd 用户单元拉起 mpd
+  # （ExecStart 走 nix store 路径，NixOS 没有 /usr/bin/mpd）。
   services.mpd-mpris.enable = true;
 
   i18n.inputMethod = {
@@ -186,7 +168,18 @@
     "fish/upall.sh".source = ../config/fish/upall.sh;
     "fontconfig".source = ../config/fontconfig;
     "xfce4".source = ../config/xfce4;
+    # mpd：只接管 mpd.conf 这一个文件，~/.config/mpd 仍是真实可写目录，
+    # 这样 mpd 才能写 mpd.db / mpdstate / playlists（整目录符号链接到 store 会只读）。
+    "mpd/mpd.conf".source = ../config/mpd/mpd.conf;
+    "ncmpcpp".source = ../config/ncmpcpp;
   };
+
+  # mpd 需要这些目录存在且可写
+  systemd.user.tmpfiles.rules = [
+    "d %h/Music/Music 0755 - - -"
+    "d %h/.config/mpd 0755 - - -"
+    "d %h/.config/mpd/playlists 0755 - - -"
+  ];
 
   # waybar 交由 systemd 用户服务托管（对齐 dotfiles 的 systemd 启动方式），
   # 不再在 hyprland 里 exec-once 直接拉起。
@@ -219,6 +212,25 @@
       Description = "Hyprland Session Target";
       Requires = [ "graphical-session.target" ];
       After = [ "graphical-session.target" ];
+    };
+  };
+
+  # mpd：对应 dotfiles 里由 systemd 托管的 mpd（Arch 那边是 /usr/bin/mpd）
+  systemd.user.services.mpd = {
+    Unit = {
+      Description = "Music Player Daemon";
+      Documentation = "https://www.musicpd.org/";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon --verbose";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
     };
   };
 
