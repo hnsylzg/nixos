@@ -1,0 +1,35 @@
+@import "colors.rasi"
+* {
+  lightbg : @surface-container;
+  background : @surface-container;
+  lightfg : @primary;
+  foreground : @on-surface;
+  font : "Inter 11";
+}
+listview {
+  lines : 10;
+  columns : 1;
+  border:  0;
+}
+window {
+  width : 25em;
+  // border-color: @outline-variant;
+  border-color: @primary;
+  border: 2;
+  border-radius: 10px;
+}
+element selected.normal {
+    background-color: transparent;   /* 选中时的背景色，这里使用了你定义的 primary */
+    text-color:       @primary; /* 选中时的文字颜色 */
+}
+
+/* 确保文字元素继承上面的颜色设置 */
+// element-text selected {
+//     background-color: inherit;
+//     text-color:       inherit;
+// }
+//
+// /* 如果你有图标，也确保图标背景继承 */
+// element-icon selected {
+//     background-color: inherit;
+// }

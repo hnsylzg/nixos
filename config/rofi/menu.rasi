@@ -1,3 +1,4 @@
+@import "theme.rasi"
 configuration {
   // 基础参数
   show-icons: true;
@@ -15,29 +16,16 @@ configuration {
   //!MousePrimary does the click up
   me-accept-entry: "!MousePrimary";
   }
-* {
-  lightbg: #00000000;
-  background: #00000000;
-  lightfg: #f5c2e7;
-  foreground: #eeeeee;
-  font: "Roboto 11";
-}
 listview {
   lines: 20;
   columns: 1;
-  border:    0;
 }
 window {
   location: north west;
   width: 15em;
-  border-radius: 10px; 
-  border: 0;
-  border-color: #ca9ee6;
-  // background-color: #141a1bcc;
-  background-color: #2d2d3aee;
+  border: 2;
   x-offset: 6;
   y-offset: 6;
 }
-element selected.normal {
-    text-color: #141a1b;
- }
+
+

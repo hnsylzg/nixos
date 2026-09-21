@@ -71,6 +71,22 @@
     wl-clipboard
     cliphist
     wl-clip-persist
+
+    # 截图 submap（Print）：grimblast 截图 → swappy 标注 → wl-copy/notify-send
+    grimblast
+    grim
+    slurp
+    swappy
+    # 录屏 submap（SUPER+SHIFT+R）：waybar/scripts/recorder.sh 依赖
+    wf-recorder
+    # 通知/上传/进程工具（notify-send、curl 上传 x0.at、pgrep/pkill/killall/xargs）
+    libnotify
+    curl
+    procps
+    psmisc
+    findutils
+    # 锁定屏幕（SUPER+SHIFT+E 的 (l)锁定）
+    swaylock
     vscode
     waypaper
     awww
@@ -95,10 +111,21 @@
 
   services.mpd = {
     enable = true;
-    musicDirectory = "/home/lzg/音乐/Music";
+    # 与 ~/.config/ncmpcpp/config 的 mpd_music_dir 保持一致
+    musicDirectory = "/home/lzg/Music/Music";
     extraConfig = ''
-    # must specify one or more outputs in order to play audio!
-    # (e.g. ALSA, PulseAudio, PipeWire), see next sections
+      # 走 pipewire-pulse（与 dotfiles 的 type "pulse" 一致）
+      audio_output {
+        type "pulse"
+        name "Pulse Output"
+      }
+      # 供可视化工具读取的 fifo（与 dotfiles 一致）
+      audio_output {
+        type    "fifo"
+        name    "my_fifo"
+        path    "/tmp/mpd.fifo"
+        format  "44100:16:2"
+      }
     '';
 
     # Optional:
