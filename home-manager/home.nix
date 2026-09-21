@@ -203,6 +203,10 @@
     };
     Service = {
       Type = "simple";
+      # systemd 用户单元默认不带用户会话的 PATH，而 config.jsonc 里全是裸命令
+      # （exec-if 的 pgrep、clipboard 的 cliphist/rofi、pkill -RTMIN+8 等），
+      # 缺 PATH 会导致 custom/wf-recorder 的 exec-if 恒为假 —— 模块永远不显示。
+      Environment = "PATH=${config.home.profileDirectory}/bin:/run/current-system/sw/bin:${pkgs.procps}/bin:${pkgs.coreutils}/bin";
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 1.5";
       ExecStart = "${pkgs.waybar}/bin/waybar";
       ReloadSignal = "SIGUSR2"; # waybar 用 SIGUSR2 重载配置，避免依赖 /bin/kill
