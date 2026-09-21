@@ -134,7 +134,8 @@ hl.animation({ leaf = "borderangle", enabled = true, speed = 75, bezier = "liner
 -------------------
 hl.config({
     dwindle = {
-        pseudotile     = true, -- master switch for pseudotiling
+        -- NOTE: dwindle.pseudotile was removed in Hyprland 0.55; pseudotiling
+        -- is now a runtime toggle via the `window.pseudo` dispatcher (bound to SUPER+P).
         preserve_split = true, -- you probably want this
     },
     master = {
