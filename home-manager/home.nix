@@ -92,6 +92,7 @@
     awww
     ncmpcpp
     mpd
+    dunst
     luarocks
     lazygit
     nodejs
@@ -177,6 +178,7 @@
     "mpd/mpd.conf".source = ../config/mpd/mpd.conf;
     "ncmpcpp".source = ../config/ncmpcpp;
     "swappy".source = ../config/swappy;
+    "dunst".source = ../config/dunst;
   };
 
   # 这些目录必须存在：mpd 音乐库、录屏输出目录、swappy 截图保存目录
@@ -219,6 +221,26 @@
       Description = "Hyprland Session Target";
       Requires = [ "graphical-session.target" ];
       After = [ "graphical-session.target" ];
+    };
+  };
+
+  # dunst 通知守护进程：不用 services.dunst（它会生成自己的 dunstrc，与部署版冲突），
+  # 改为部署 dotfiles 的 dunstrc + 自建 systemd 用户单元（同 waybar / mpd 的做法）。
+  systemd.user.services.dunst = {
+    Unit = {
+      Description = "Dunst notification daemon";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "dbus";
+      BusName = "org.freedesktop.Notifications";
+      ExecStart = "${pkgs.dunst}/bin/dunst";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
     };
   };
 

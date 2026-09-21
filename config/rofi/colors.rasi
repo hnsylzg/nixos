@@ -1,0 +1,16 @@
+/*
+ * rofi 配色变量（theme.rasi / powermenu.rasi 顶部都 @import 了这个文件，
+ * 缺失时 @primary、@on-surface、@surface-container 全部未定义 → rofi 回退到默认浅色）。
+ * 取值与 waybar/colors.css、fuzzel/colors.ini、kitty dank-theme.conf 同一套深色。
+ */
+* {
+  primary:            #edb1ff;
+  on-surface:         #eddeec;
+  surface-container:  #251d26;
+  surface:            #18111a;
+  outline-variant:    #4d444e;
+  outline:            #998d99;
+  secondary:          #e3badb;
+  tertiary:           #f5b4d7;
+  error:              #ffb4ab;
+}
