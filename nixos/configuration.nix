@@ -187,7 +187,7 @@
     settings = {
       default_session = {
         command =
-          "${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu --user-menu-min-uid 1000 --remember --remember-session --time --issue --asterisks";
+          "${pkgs.tuigreet}/bin/tuigreet --user-menu --user-menu-min-uid 1000 --remember --remember-session --time --issue --asterisks";
         user = "greeter";
       };
     };
