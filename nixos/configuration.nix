@@ -230,24 +230,6 @@
     enable = true;
   };
 
-  # 字体：此前仓库没装任何字体包，而 waybar/rofi/dunst/fontconfig 都依赖它们
-  # （waybar 大量模块 font-family: "Symbols Nerd Font"、rofi 的 "NotoSans Nerd Font"/
-  # "Inter"、dunst 的 "Noto Sans"、fonts.conf 把 monospace 映射到 JetBrainsMono Nerd Font）。
-  # 缺字形时图标会显示成空白或方框。
-  fonts = {
-    enableDefaultPackages = true;   # DejaVu / Liberation 等兜底
-    packages = with pkgs; [
-      noto-fonts            # Noto Sans（dunst/rofi 用到）
-      noto-fonts-cjk-sans   # 中文字形
-      noto-fonts-cjk-serif
-      noto-fonts-emoji
-      inter                 # rofi theme.rasi 的 "Inter 11"
-      nerd-fonts.symbols-only
-      nerd-fonts.noto       # "NotoSans Nerd Font"（rofi powermenu）
-      nerd-fonts.jetbrains-mono  # fonts.conf 里 monospace 的首选
-    ];
-  };
-
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
 
