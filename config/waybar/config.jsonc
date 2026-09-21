@@ -253,7 +253,7 @@
     "return-type": "json",
     "format": "{}",
     "exec": "echo '{\"class\": \"recording\",\"text\":\"󰑊\",\"tooltip\":\"press $mod+Esc to stop recording\"}'",
-    "exec-if": "pgrep wf-recorder",
+    "exec-if": "for p in /proc/[0-9]*; do read -r c < \"$p/comm\" 2>/dev/null || continue; [ \"$c\" = wf-recorder ] && exit 0; done; exit 1",
     "on-click": "pkill -x -SIGRTMIN+8 waybar",
     "signal": 8
   }
