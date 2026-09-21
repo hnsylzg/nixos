@@ -15,8 +15,8 @@ local locking     = "swaylock -f -c 000000 --show-failed-attempts --fade-in 0.2 
 -------------------
 
 -- Power menu: SUPER + SHIFT + E
-hl.bind(mainMod .. " + SHIFT + E", hl.dsp.submap("powermenu"))
-hl.define_submap("powermenu", function()
+hl.bind(mainMod .. " + SHIFT + E", hl.dsp.submap(" (l)锁定 (e)注销 (r)重启 (u)睡眠 (s)关机"))
+hl.define_submap(" (l)锁定 (e)注销 (r)重启 (u)睡眠 (s)关机", function()
     hl.bind("L", hl.dsp.exec_cmd(locking))
     hl.bind("L", hl.dsp.submap("reset"))
     hl.bind("E", hl.dsp.exit())
@@ -28,8 +28,8 @@ hl.define_submap("powermenu", function()
 end)
 
 -- Screenshot picker: Print
-hl.bind("print", hl.dsp.submap("screenshot"))
-hl.define_submap("screenshot", function()
+hl.bind("print", hl.dsp.submap("󰄄 Pick (p) Output (o)+ Shift for "))
+hl.define_submap("󰄄 Pick (p) Output (o)+ Shift for ", function()
     hl.bind("P", hl.dsp.exec_cmd([=[grimblast save area - | swappy -f - && [[ $(wl-paste -l) == "image/png" ]] && notify-send "Screenshot copied to clipboard"]=]))
     hl.bind("P", hl.dsp.submap("reset"))
     hl.bind("O", hl.dsp.exec_cmd([=[grimblast save output - | swappy -f - && [[ $(wl-paste -l) == "image/png" ]] && notify-send "Screenshot copied to clipboard"]=]))
@@ -42,8 +42,8 @@ hl.define_submap("screenshot", function()
 end)
 
 -- Recording: SUPER + SHIFT + R
-hl.bind(mainMod .. " + SHIFT + R", hl.dsp.submap("record"))
-hl.define_submap("record", function()
+hl.bind(mainMod .. " + SHIFT + R", hl.dsp.submap(" Record (r)+ [Shift for 󰍮]"))
+hl.define_submap(" Record (r)+ [Shift for 󰍮]", function()
     hl.bind("R", hl.dsp.exec_cmd("$HOME/.config/waybar/scripts/recorder.sh"))
     hl.bind("R", hl.dsp.submap("reset"))
     hl.bind("SHIFT + R", hl.dsp.exec_cmd("$HOME/.config/waybar/scripts/recorder.sh -a"))
