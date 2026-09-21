@@ -1,0 +1,6 @@
+# nixos-rebuild / home-manager switch 会在仓库根生成 result 符号链接。
+# 它是未跟踪文件，Nix 会因此认为工作树是脏的，每次评估都刷
+# "warning: Git tree '/home/lzg/nixos' is dirty"。忽略掉即可（reset --hard 不会删它，
+# 不忽略就会一直残留、一直报警告）。
+/result
+/result-*
