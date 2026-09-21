@@ -1,77 +1,105 @@
 #!/usr/bin/env bash
-# NixOS 清理脚本
+# NixOS 清理脚本（默认路径都是快的；慢的步骤默认跳过并给了开关）
 #
 # 用法：
-#   bash cleanup.sh              # 默认保留最近 3 个 generation（可回滚）
-#   bash cleanup.sh --keep 5     # 保留最近 5 个
-#   bash cleanup.sh --all        # 除当前外全删，回收最多，但之后无法回滚
-#   bash cleanup.sh --dry-run    # 只看能回收多少，不动手
+#   bash cleanup.sh               # 保留最近 3 个 generation（可回滚）
+#   bash cleanup.sh --keep 5      # 保留最近 5 个
+#   bash cleanup.sh --all         # 除当前外全删，回收最多（会问确认；非交互加 -y）
+#   bash cleanup.sh --dry-run     # 只看能回收多少，不动手
+#   bash cleanup.sh --optimise    # 附带做硬链接去重（最慢，可能十几分钟）
+#   bash cleanup.sh --help
 #
-# 流程：删旧 generation → GC → 硬链接去重 → 清缓存/日志 → 重建引导项
+# 慢操作说明（避免看起来像卡死）：
+#   - 每个步骤前都会打时间戳
+#   - du / nix-store --gc --print-dead 都加了 timeout，超时就跳过不再干等
+#   - 需要确认时若不是交互终端就直接跳过确认，不会挂住
 set -uo pipefail
 
 KEEP=3
 DRY=0
+YES=0
+DO_OPT=0
+
+usage() { sed -n '2,15p' "$0"; }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --all)     KEEP=0; shift ;;
-    --keep)    KEEP="${2:?--keep 需要一个数字}"; shift 2 ;;
-    --dry-run) DRY=1; shift ;;
-    -h|--help) sed -n '2,11p' "$0"; exit 0 ;;
+    --all)      KEEP=0; shift ;;
+    --keep)     KEEP="${2:?--keep 需要一个数字}"; shift 2 ;;
+    --dry-run)  DRY=1; shift ;;
+    --optimise) DO_OPT=1; shift ;;
+    -y|--yes)   YES=1; shift ;;
+    -h|--help)  usage; exit 0 ;;
     *) echo "未知参数: $1（用 --help 看用法）"; exit 1 ;;
   esac
 done
 
-# nix-env 的 generation 选择器：+N = 保留最近 N 个；old = 只留当前
 SPEC="+${KEEP}"
 [[ "$KEEP" == "0" ]] && SPEC="old"
 
-store_size() { du -sh /nix/store 2>/dev/null | cut -f1; }
-dead_count() { nix-store --gc --print-dead 2>/dev/null | wc -l | tr -d ' '; }
+step() { echo; echo "[$(date +%H:%M:%S)] ==> $*"; }
+# 带超时，避免在大 store 上长时间无输出，看起来像卡死
+store_size() { timeout 15 du -sh /nix/store 2>/dev/null | cut -f1 || echo "(du 超时，跳过)"; }
+free_space() { df -h / | awk 'NR==2 {print $4}'; }
 
-echo "清理前 /nix/store = $(store_size)"
-echo "可回收的 store 路径 = $(dead_count) 个"
-echo "保留策略           = ${SPEC}"
+echo "开始时间        : $(date +%H:%M:%S)"
+echo "可用空间        : $(free_space)"
+echo "/nix/store 大小 : $(store_size)"
+echo "保留策略        : ${SPEC}（最近 ${KEEP} 个；0 = 只留当前）"
 
 if [[ "$DRY" == "1" ]]; then
-  echo "(dry-run，未做任何改动)"
+  step "dry-run：统计可回收空间（最多等 90 秒）"
+  echo "可回收 store 路径: $(timeout 90 nix-store --gc --print-dead 2>/dev/null | wc -l | tr -d ' ') 个"
+  step "dry-run 结束，未做任何改动"
   exit 0
 fi
 
-if [[ "$KEEP" == "0" ]]; then
-  read -r -p "将删除除当前外的全部 generation，之后无法回滚。确认？[y/N] " ans
-  [[ "$ans" != "y" && "$ans" != "Y" ]] && { echo "已取消"; exit 1; }
+# 先把 sudo 凭据缓存起来，避免跑到一半才弹密码框
+step "获取 sudo 凭据"
+sudo -v
+
+if [[ "$KEEP" == "0" && "$YES" != "1" ]]; then
+  if [[ -t 0 ]]; then
+    read -r -p "将删除除当前外的全部 generation，之后无法回滚。确认？[y/N] " ans
+    [[ "$ans" != "y" && "$ans" != "Y" ]] && { echo "已取消"; exit 1; }
+  else
+    echo "非交互环境，跳过确认（要强制删除请加 -y）"
+    exit 1
+  fi
 fi
 
-echo "==> 删除旧 generation"
-# home-manager（在用户目录下，root 的 GC 看不到，必须自己先删）
+step "1/6 删除旧 generation"
 HM_PROFILE="$HOME/.local/state/nix/profiles/home-manager"
 [[ -e "$HM_PROFILE" ]] && nix-env -p "$HM_PROFILE" --delete-generations "$SPEC"
 nix-env --delete-generations "$SPEC" 2>/dev/null
 sudo nix-env -p /nix/var/nix/profiles/system --delete-generations "$SPEC"
 sudo nix-env --delete-generations "$SPEC" 2>/dev/null
 
-echo "==> 垃圾回收"
-# 上面已按策略删过 generation；--all 时再用 -d 兜底删掉其它 profile 的旧 generation
+step "2/6 垃圾回收（这一步可能要 1~3 分钟）"
 if [[ "$KEEP" == "0" ]]; then
   sudo nix-collect-garbage -d
 else
   sudo nix-collect-garbage
 fi
 
-echo "==> 清缓存与构建临时目录"
+step "3/6 清缓存与构建临时目录"
 sudo rm -rf /root/.cache/nix "$HOME/.cache/nix" /tmp/nix-build-* 2>/dev/null
 
-echo "==> 硬链接去重（optimise）"
-sudo nix-store --optimise
+if [[ "$DO_OPT" == "1" ]]; then
+  step "4/6 硬链接去重 --optimise（最慢，可能十几分钟）"
+  sudo nix-store --optimise
+else
+  echo
+  echo "[$(date +%H:%M:%S)] ==> 4/6 跳过 optimise（默认关闭；需要时加 --optimise）"
+fi
 
-echo "==> 日志只留 7 天"
+step "5/6 日志只留 7 天"
 sudo journalctl --vacuum-time=7d
 
-echo "==> 重建引导项"
+step "6/6 重建引导项"
 sudo /run/current-system/bin/switch-to-configuration boot
 
 echo
-echo "清理后 /nix/store = $(store_size)"
-df -h / | tail -1
+echo "完成时间        : $(date +%H:%M:%S)"
+echo "可用空间        : $(free_space)"
+echo "/nix/store 大小 : $(store_size)"
