@@ -1,53 +1,39 @@
--- 主题配置（从 hyprland.lua 拆出，对应 dotfiles 的 config/hypr/theme.lua）
+-- 主题设置：移植自 dotfiles 的 config/hypr/theme.lua（hyprconf2lua v1.4.0 生成）
+-- 原文件里 col.* 是 Arch 侧 matugen 的 $outline / $outline_variant 占位，
+-- 这里按本仓库静态深色配色（同 waybar/colors.css）填实。
 
--------------------
----- THEME: Catppuccin (config.d/theme-catppuccin.conf) ----
--------------------
+---@module 'hl'
+
 hl.config({
     general = {
-        gaps_in     = 3,
-        gaps_out    = 6,
-        border_size = 3,
-
+        -- See https://wiki.hyprland.org/Configuring/Variables/ for more
+        gaps_in = 3,
+        gaps_out = 6,
+        border_size = 2,
         col = {
-            inactive_border = "0xff414868", -- Inactive gray
-            active_border   = {
-                colors = { "rgb(8839EF)", "rgb(7CB6F5)", "rgb(FD807E)" },
-                angle  = 45,
-            },
+            active_border   = "rgb(edb1ff)", -- $outline         → primary #edb1ff
+            inactive_border = "rgb(4d444e)", -- $outline_variant → #4d444e
         },
-
-        layout        = "dwindle",
+        layout = "dwindle",
+        -- Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
         allow_tearing = false,
     },
+})
 
-    group = {
-        col = {
-            border_active           = { colors = { "rgba(ca9ee6ff)", "rgba(f2d5cfff)" }, angle = 45 },
-            border_inactive         = { colors = { "rgba(b4befecc)", "rgba(6c7086cc)" }, angle = 45 },
-            border_locked_active    = { colors = { "rgba(ca9ee6ff)", "rgba(f2d5cfff)" }, angle = 45 },
-            border_locked_inactive  = { colors = { "rgba(b4befecc)", "rgba(6c7086cc)" }, angle = 45 },
-        },
-    },
-
+hl.config({
     decoration = {
-        rounding = 10,
-
-        blur = {
-            enabled = true,
-            size    = 3,
-            passes  = 1,
-        },
-
+        -- See https://wiki.hyprland.org/Configuring/Variables/ for more
+        rounding = 12,
+        active_opacity = 1.0,
+        inactive_opacity = 0.9,
         shadow = {
-            enabled      = true,
-            range        = 4,
-            render_power = 3,
-            color        = 0xee1a1a1a,
+            enabled = true,
+            range = 30,
+            render_power = 5,
+            offset = "0 5",
+            color = "rgba(00000070)",
         },
-    },
-
-    render = {
-        cm_enabled = false,
+        -- dotfiles 这份没有模糊；仓库旧主题曾开启，需要的话取消注释
+        -- blur = { enabled = true, size = 3, passes = 1 },
     },
 })
