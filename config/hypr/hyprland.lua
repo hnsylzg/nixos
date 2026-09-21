@@ -1,6 +1,7 @@
 -- Hyprland Lua config (0.55+)
--- Migrated from hyprlang .conf files. Mirrors:
---   hyprland.conf + config.d/theme-catppuccin.conf + config.d/userprefs.conf
+-- Migrated from the old hyprlang config. The legacy .conf files
+-- (hyprland.conf, keybindings.conf, windowrules.conf, config.d/* theme/userprefs,
+-- nvidia.conf, theme-matcha.conf) are removed -- everything now lives in these .lua files.
 -- Binds / window rules live in keybindings.lua / windowrules.lua (separate scopes,
 -- so a runtime error there will not abort this core file).
 
