@@ -268,6 +268,27 @@
     };
   };
 
+  # polkit 认证代理：原 hyprland.lua 的 autostart 用 Arch 路径
+  # /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1，NixOS 上没有 /usr/lib，
+  # 那行一直是死命令。改为自建 systemd 用户单元拉起，ExecStart 走 nix store 路径
+  #（同 waybar / mpd / dunst 的做法）。
+  systemd.user.services.polkit-gnome-auth-agent = {
+    Unit = {
+      Description = "polkit-gnome authentication agent";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
