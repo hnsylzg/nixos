@@ -85,7 +85,21 @@
     findutils
     # 锁定屏幕（SUPER+SHIFT+E 的 (l)锁定）
     swaylock
-    vscode
+    # VSCode：nixpkgs 的 code wrapper **不读** ~/.config/code-flags.conf，
+    # 所以 flag 必须直接编进包装里。原因：VMware 虚拟机（vmwgfx 无硬件 GPU）在
+    # Wayland 上 GBM 缓冲区分配失败（gbm_pixmap_wayland.cc: Cannot create bo ...
+    # Scanout|Rendering）→ Electron 静默退出，必须绕开 GPU 路径。
+    # flag 与 config/code-flags.conf 内容保持一致（两处都写，任一生效即可）。
+    (symlinkJoin {
+      name = "code";
+      paths = [ vscode ];
+      nativeBuildInputs = [ makeWrapper ];
+      postBuild = ''
+        rm -f $out/bin/code
+        makeWrapper ${vscode}/bin/code $out/bin/code \
+          --add-flags "--disable-gpu --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime"
+      '';
+    })
     google-chrome
     waypaper
     playerctl
