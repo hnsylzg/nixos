@@ -86,7 +86,9 @@
     # 锁定屏幕（SUPER+SHIFT+E 的 (l)锁定）
     swaylock
     vscode
+    google-chrome
     waypaper
+    playerctl
     awww
     ncmpcpp
     mpd
