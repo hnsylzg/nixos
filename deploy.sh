@@ -48,6 +48,26 @@ if ! git -C "$REPO_ROOT" diff --quiet -- flake.lock; then
   git -C "$REPO_ROOT" add flake.lock
   git -C "$REPO_ROOT" commit -q -m "chore: update flake.lock ($(date +%F))"
   echo "        已本地提交 flake.lock"
+
+  # 推送回去，仓库里那份 lock 才会跟着新（否则下次 reset --hard 又回到旧 lock）。
+  # 交互时询问；非交互时用 PUSH_LOCK=1 bash deploy.sh 才会推。
+  BRANCH="$(git -C "$REPO_ROOT" rev-parse --abbrev-ref HEAD)"
+  WANT_PUSH="${PUSH_LOCK:-}"
+  if [[ "$WANT_PUSH" != "1" && -t 0 ]]; then
+    read -r -p "        要把新的 flake.lock push 回 origin/$BRANCH 吗？[y/N] " ans
+    [[ "$ans" == "y" || "$ans" == "Y" ]] && WANT_PUSH=1
+  fi
+  if [[ "$WANT_PUSH" == "1" ]]; then
+    if git -C "$REPO_ROOT" push origin "$BRANCH"; then
+      echo "        已 push（仓库 lock 已同步）"
+    else
+      echo "        [!!] push 失败（多为机器未配置 git 凭据/密钥）。lock 仅本机生效，"
+      echo "             下次 deploy 会重新解析；可手动：git -C $REPO_ROOT push origin $BRANCH"
+    fi
+  else
+    echo "        未 push，lock 仅本机生效；下次 deploy 会重新解析。"
+    echo "             想同步请手动：git -C $REPO_ROOT push origin $BRANCH  （或 PUSH_LOCK=1 bash deploy.sh）"
+  fi
 fi
 
 echo "==> [5/7] 构建并切换系统配置"
