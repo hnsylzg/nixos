@@ -148,6 +148,7 @@
   xdg.configFile = {
     # 顶层 flag / 配置文件
     "starship.toml".source = ../config/starship.toml;
+    "code-flags.conf".source = ../config/code-flags.conf;
     "qq-flags.conf".source = ../config/qq-flags.conf;
     "typora-flags.conf".source = ../config/typora-flags.conf;
     "spotify-launcher.conf".source = ../config/spotify-launcher.conf;
