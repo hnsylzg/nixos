@@ -18,20 +18,19 @@ hl.monitor({
 ---------------------------
 ---- ENVIRONMENT VARS ------
 ---------------------------
-hl.env("EDITOR", "nvim")
-hl.env("TERMINAL", "foot")
-hl.env("SHELL", "fish")
-hl.env("MOZ_DBUS_REMOTE", "1")
-hl.env("GTK_CSD", "0")
-hl.env("GDK_BACKEND", "wayland,x11")
-hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+
 hl.env("XCURSOR_SIZE", "24")
-hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
-hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
-hl.env("XDG_SESSION_DESKTOP", "Hyprland")
-hl.env("XDG_SESSION_TYPE", "wayland")
+
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+
+hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
+
+hl.env("QT_QPA_PLATFORMTHEME_QT6", "gtk3")
+
+hl.env("TERMINAL", "kitty")
+
 
 -- NOTE: config.d/userprefs.conf forced software GL. Kept as-is for behavior parity,
 -- but on an NVIDIA machine this is almost certainly unintended — see migration notes.
@@ -112,18 +111,21 @@ hl.config({
 ---- AUTOSTART (replaces exec-once) ----
 -------------------
 hl.on("hyprland.start", function()
-    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
-    hl.exec_cmd("systemctl --user start hyprland-session.target")
-    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-    hl.exec_cmd("fcitx5 -d")
-    hl.exec_cmd("waypaper --restore")
-    hl.exec_cmd("nm-applet")
-    hl.exec_cmd("nice -n 15 thunar --daemon")
-    hl.exec_cmd("ionice -c 3 playerctld daemon")
-    hl.exec_cmd([[wl-clip-persist --clipboard regular --all-mime-type-regex '(?i)^(?!image/x-inkscape-svg).+']])
-    hl.exec_cmd("wl-paste --watch cliphist store")
-    hl.exec_cmd("wl-paste --watch pkill -RTMIN+9 waybar")
-    hl.exec_cmd([[swayidle -w timeout 300 'swaylock -f -c 000000 --show-failed-attempts --fade-in 0.2 --grace 5 --grace-no-mouse --effect-vignette 0.5:0.5 --effect-blur 7x5 --ignore-empty-password --screenshots --clock' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' timeout 900 'systemctl suspend']])
+	hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+	hl.exec_cmd("systemctl --user start hyprland-session.target")
+	-- polkit 认证代理不在 hypr 内启动：NixOS 没有 /usr/lib，且本文件是纯部署（非 nix 模板），
+	-- 无法写 ${pkgs.polkit_gnome} 的 store 路径。改由 home.nix 的 systemd 用户单元
+	-- polkit-gnome-auth-agent 拉起（与 waybar/mpd/dunst 同一套路）。
+	hl.exec_cmd("waypaper --restore")
+	hl.exec_cmd("fcitx5 -d")
+	hl.exec_cmd("nm-applet")
+	hl.exec_cmd("wl-clip-persist --clipboard regular --all-mime-type-regex '(?i)^(?!image/x-inkscape-svg).+'")
+	hl.exec_cmd("wl-paste --watch cliphist store")
+	hl.exec_cmd("wl-paste --watch pkill -RTMIN+9 waybar")
+	hl.exec_cmd(
+		"swayidle -w timeout 300 'swaylock -f -c 000000 --show-failed-attempts --fade-in 0.2 --grace 5 --grace-no-mouse --effect-vignette 0.5:0.5 --effect-blur 7x5 --ignore-empty-password --screenshots --clock' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' timeout 900 'systemctl suspend'"
+	)
+	hl.exec_cmd("playerctld daemon")
 end)
 
 -------------------

@@ -171,9 +171,7 @@
     "fastfetch".source = ../config/fastfetch;
     # fish（排除 fish_variables，避免只读符号链接导致 universal variables 无法写入）
     "fish/config.fish".source = ../config/fish/config.fish;
-    "fish/aliases.fish".source = ../config/fish/aliases.fish;
-    "fish/clean_up.sh".source = ../config/fish/clean_up.sh;
-    "fish/upall.sh".source = ../config/fish/upall.sh;
+    "fish/abbrs.fish".source = ../config/fish/abbrs.fish;
     "fontconfig".source = ../config/fontconfig;
     "xfce4".source = ../config/xfce4;
     # mpd：只接管 mpd.conf 这一个文件，~/.config/mpd 仍是真实可写目录，
