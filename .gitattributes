@@ -1,2 +1,6 @@
-deploy.sh text eol=lf
-cleanup.sh text eol=lf
+# Force LF line endings for ALL text files in this repo.
+# This repo is consumed by NixOS/Linux, where CRLF silently breaks shell
+# shebangs (#!/bin/bash\r -> "bash\r: No such file or directory") and Lua/config
+# parsers. The global Git setting core.autocrlf=true on Windows would otherwise
+# re-corrupt the working tree on every checkout, so we pin eol=lf explicitly.
+* text=auto eol=lf
