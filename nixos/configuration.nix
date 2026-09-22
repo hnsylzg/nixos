@@ -49,21 +49,17 @@
     };
   };
   
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # 仅保留系统级 / 基础必备；其余用户应用已移入 home.nix（home.packages）
   environment.systemPackages = with pkgs; [
-    git
-    curl
-    wget
-    file-roller
-    xdg-terminal-exec
-    xdg-user-dirs
-    adwaita-icon-theme
-    lsof
-    google-chrome
-    gcc
-    networkmanagerapplet
-    playerctl
+    curl                # 基础网络工具（root/脚本也用得到）
+    wget                # 基础网络工具
+    gcc                 # 系统级编译器（如 nvim-treesitter 现编解析器）
+    lsof                # 诊断工具
+    networkmanagerapplet # 网络托盘图标
+    file-roller         # 归档管理器（thunar-archive-plugin 依赖）
+    xdg-terminal-exec   # 系统级默认终端
+    xdg-user-dirs       # 基础 XDG 用户目录
+    adwaita-icon-theme  # 系统图标主题
   ];
 
   nix = let

@@ -64,7 +64,6 @@
     starship
     fastfetch
     nwg-look
-    xdg-user-dirs
     nix-search-cli
     btop
     pulsemixer
@@ -79,9 +78,8 @@
     swappy
     # 录屏 submap（SUPER+SHIFT+R）：waybar/scripts/recorder.sh 依赖
     wf-recorder
-    # 通知/上传/进程工具（notify-send、curl 上传 x0.at、pgrep/pkill/killall/xargs）
+    # 通知/进程工具（notify-send、pgrep/pkill/killall/xargs；curl 见系统层）
     libnotify
-    curl
     procps
     psmisc
     findutils
