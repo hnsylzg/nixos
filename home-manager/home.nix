@@ -168,7 +168,10 @@
     "spotify-launcher.conf".source = ../config/spotify-launcher.conf;
     "xdg-terminals.list".source = ../config/xdg-terminals.list;
     # 程序配置目录
-    "kitty".source = ../config/kitty;
+    # kitty 逐文件接管：`kitty +kitten themes` 会在 ~/.config/kitty/ 里
+    # 生成 current-theme.conf 并改写 kitty.conf，整目录只读时换主题会失败。
+    "kitty/kitty.conf".source = ../config/kitty/kitty.conf;
+    "kitty/catppuccin.conf".source = ../config/kitty/catppuccin.conf;
     "hypr".source = ../config/hypr;
     "rofi".source = ../config/rofi;
     "waybar".source = ../config/waybar;
