@@ -9,15 +9,32 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HW="$REPO_ROOT/nixos/hardware-configuration.nix"
 BACKUP="$HOME/hw-backup-$(date +%F-%H%M%S).conf"
 
-echo "==> [1/7] 备份当前机器的 hardware-configuration.nix"
+# 清理 ~/.config 下悬空的 home-manager 符号链接（断链 + 目标在 /nix/store 下）。
+# 旧代把整目录符号链接改成逐文件后会残留坏链，挡住下面 [7/8] home-manager 重建
+# 同名目录（mkdir 撞 EEXIST），必须先清。
+prune_dangling_links() {
+  local n f
+  n=$(find "$HOME/.config" -xtype l -lname '/nix/store/*' 2>/dev/null | wc -l | tr -d ' ')
+  if [ "${n:-0}" -eq 0 ]; then
+    echo "        无悬空符号链接"
+    return
+  fi
+  echo "        发现 $n 个："
+  find "$HOME/.config" -xtype l -lname '/nix/store/*' -print 2>/dev/null | while IFS= read -r f; do
+    echo "        删除 $f"
+    rm -f "$f"
+  done
+}
+
+echo "==> [1/8] 备份当前机器的 hardware-configuration.nix"
 cp -f "$HW" "$BACKUP"
 echo "        已备份到 $BACKUP"
 
-echo "==> [2/7] 拉取并硬对齐 GitHub 的 origin/main"
+echo "==> [2/8] 拉取并硬对齐 GitHub 的 origin/main"
 git -C "$REPO_ROOT" fetch origin
 git -C "$REPO_ROOT" reset --hard origin/main
 
-echo "==> [3/7] 校验硬件 UUID 是否对应本机真实磁盘"
+echo "==> [3/8] 校验硬件 UUID 是否对应本机真实磁盘"
 mapfile -t UUIDS < <(grep -oE 'by-uuid/[0-9A-Fa-f-]+' "$HW" | sed 's#by-uuid/##')
 ALL_OK=1
 for u in "${UUIDS[@]}"; do
@@ -37,7 +54,7 @@ if [ "$ALL_OK" -ne 1 ]; then
   git -C "$REPO_ROOT" commit -q -m "chore: use this machine's hardware-configuration.nix"
 fi
 
-echo "==> [4/7] 更新并提交 flake.lock（消除 Git tree is dirty 警告）"
+echo "==> [4/8] 更新并提交 flake.lock（消除 Git tree is dirty 警告）"
 # 说明：flake.lock 与 flake.nix 不一致时，nixos-rebuild 会自己改写 flake.lock，
 # 工作树因此变脏 → 之后每次构建都刷 "warning: Git tree ... is dirty"。
 # 这里先显式更新并提交，构建阶段 lock 已是最新、不会被改写，警告随之消失。
@@ -70,11 +87,14 @@ if ! git -C "$REPO_ROOT" diff --quiet -- flake.lock; then
   fi
 fi
 
-echo "==> [5/7] 构建并切换系统配置"
+echo "==> [5/8] 构建并切换系统配置"
 sudo nixos-rebuild switch --flake "$REPO_ROOT#nixos"
 
-echo "==> [6/7] 应用 home 配置"
+echo "==> [6/8] 清理悬空符号链接"
+prune_dangling_links
+
+echo "==> [7/8] 应用 home 配置"
 home-manager switch --flake "$REPO_ROOT#lzg@nixos"
 
-echo "==> [7/7] 完成"
+echo "==> [8/8] 完成"
 echo "        请重新登录使 fish 默认 shell 生效；若有问题用 sudo nixos-rebuild --rollback 回退。"
