@@ -185,7 +185,11 @@
     "fish/config.fish".source = ../config/fish/config.fish;
     "fish/abbrs.fish".source = ../config/fish/abbrs.fish;
     "fontconfig".source = ../config/fontconfig;
-    "xfce4".source = ../config/xfce4;
+    # xfce4 只接管 helpers.rc：xfconf（~/.config/xfce4/xfconf/）必须留给 Thunar 自己写。
+    # 整目录符号链接时它在 /nix/store 里是只读的，Thunar 存不下任何设置 ——
+    # 表现就是"显示隐藏文件"勾了/取消了下回打开又变回原样（last-show-hidden 被写死）。
+    # config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml 保留在仓库里仅作参考，不再部署。
+    "xfce4/helpers.rc".source = ../config/xfce4/helpers.rc;
     # mpd：只接管 mpd.conf 这一个文件，~/.config/mpd 仍是真实可写目录，
     # 这样 mpd 才能写 mpd.db / mpdstate / playlists（整目录符号链接到 store 会只读）。
     "mpd/mpd.conf".source = ../config/mpd/mpd.conf;
